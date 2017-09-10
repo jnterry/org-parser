@@ -2,7 +2,7 @@
 
 Parser for generating an AST representing an emacs org-mode document
 
-[![Build Status](https://travis-ci.org/jnterry/any-db-q.svg?branch=master)](https://travis-ci.org/jnterry/org-parser) [![Coverage Status](https://coveralls.io/repos/github/jnterry/any-db-q/badge.svg?branch=master)](https://coveralls.io/github/jnterry/org-parser?branch=master)
+[![Build Status](https://travis-ci.org/jnterry/org-parser.svg?branch=master)](https://travis-ci.org/jnterry/org-parser) [![Coverage Status](https://coveralls.io/repos/github/jnterry/org-parser/badge.svg?branch=master)](https://coveralls.io/github/jnterry/org-parser?branch=master)
 
 # WARNING: PRERELEASE
 
