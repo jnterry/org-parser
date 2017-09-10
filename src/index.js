@@ -1,17 +1,19 @@
 ////////////////////////////////////////////////////////////////////////////
 ///                       Part of org-parser                             ///
 ////////////////////////////////////////////////////////////////////////////
-/// \file all.js
+/// \file index.js
 /// \author Jamie Terry
 /// \date 2017/09/10
-/// \brief Utility file which defines a test suite that includes all other
-/// tests for org-parser
+/// \brief Contains org-parser entry point
 ////////////////////////////////////////////////////////////////////////////
 
 "use strict";
 
-require('./common');
+let OrgLang = require('./OrgLang');
 
-describe('org-parser', () => {
-	importTest('ParserUtils');
-});
+module.exports = {
+	//parse : OrgLang.document.parser.parse,
+	parse : function(){
+		throw 'Full parser not implemented!';
+	}
+};

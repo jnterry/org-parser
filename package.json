@@ -2,7 +2,7 @@
 	"name": "org-parser",
 	"version": "0.0.0",
 	"description": "Parser for generating an AST representing an emacs org-mode document",
-	"main": "parser.js",
+	"main": "src/index.js",
 	"scripts": {
 		"test": "./node_modules/.bin/mocha test/all.js --reporter spec",
 		"cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/all.js"
