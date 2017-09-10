@@ -1,0 +1,26 @@
+{
+	"name": "org-parser",
+	"version": "0.0.0",
+	"description": "Parser for generating an AST representing an emacs org-mode document",
+	"main": "parser.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jnterry/org-parser.git"
+	},
+	"keywords": [
+		"parser",
+		"emacs",
+		"org",
+		"org-mode",
+		"AST"
+	],
+	"author": "Jamie Terry",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/jnterry/org-parser/issues"
+	},
+	"homepage": "https://github.com/jnterry/org-parser#readme"
+}
