@@ -1,0 +1,28 @@
+////////////////////////////////////////////////////////////////////////////
+///                       Part of org-parser                             ///
+////////////////////////////////////////////////////////////////////////////
+/// \file all.js
+/// \author Jamie Terry
+/// \date 2017/09/10
+/// \brief Utility file which defines a test suite that includes all other
+/// tests for org-parser
+////////////////////////////////////////////////////////////////////////////
+
+"use strict";
+
+global.expect = require('chai').expect;
+
+/////////////////////////////////////////////////////////////////////
+/// \brief Helper function which imports a file containing a test suite
+/////////////////////////////////////////////////////////////////////
+function importTest(name, path){
+	if(path == null){ path = name; }
+
+	describe(name, function(){
+		require("./" + path);
+	});
+}
+
+describe('org-parser', () => {
+	importTest('test');
+});
