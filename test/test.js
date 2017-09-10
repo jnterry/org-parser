@@ -2,6 +2,13 @@
 
 let OrgParser = require('..');
 
+it('Header', () => {
+	let result = OrgParser.parse('*** Hi Human');
+
+	expect(result).to.equal({});
+});
+
+/*
 it('test-pass', () => {
 	let result = OrgParser.parse("Hello World");
 
@@ -27,3 +34,4 @@ it('test-fail', () => {
 		offset : 0,
 	});
 });
+*/
