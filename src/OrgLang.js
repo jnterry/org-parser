@@ -35,6 +35,22 @@ function defParser(node_type, parser, mapper){
 
 let OrgLang = {};
 
+OrgLang.equation = defParser(
+	'equation',
+	P.string('\\')
+		.then(P.oneOf('(['))
+		.chain((x) => {
+			let closer = { '(' : ')', '[' : ']' }[x];
+			return P.manyUntil(P.any, P.string('\\' + closer));
+		}),
+	x => {
+		return {
+			contents : x.list.join('').trim(),
+			inline   : x.last === '\\)',
+		};
+	}
+);
+
 OrgLang.headline = defParser(
 	'headline',
 	P.seq(
