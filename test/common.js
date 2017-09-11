@@ -22,3 +22,13 @@ global.importTest = function(name, path){
 		require("./" + path);
 	});
 };
+
+global.expectFail = function(x, args){
+	expect(x.status).deep.equal(false);
+	if(args.column !== undefined){
+		expect(x.index.column).deep.equal(args.column);
+	}
+	if(args.line !== undefined){
+		expect(x.index.line).deep.equal(args.line);
+	}
+};

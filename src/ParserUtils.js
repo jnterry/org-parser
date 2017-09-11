@@ -113,6 +113,24 @@ P.someUntil = function(pa, pb){
 };
 
 /////////////////////////////////////////////////////////////////////
+/// \brief Returns a parser which will yield the result of p if it can,
+/// but otherwise yields undefined and consumes no input if p fails
+/////////////////////////////////////////////////////////////////////
+P.opt = function(p){
+	return P(function(input, i){
+		let rest = input.substr(i);
+
+		let x = p.mark().skip(P.all).parse(rest);
+
+		if(x.status === true){
+			return P.makeSuccess(i + (x.value.end.offset - x.value.start.offset), x.value.value);
+		}
+
+		return P.makeSuccess(i, undefined);
+	});
+};
+
+/////////////////////////////////////////////////////////////////////
 /// \brief Identity function - does nothing
 /////////////////////////////////////////////////////////////////////
 P.id = function(x){ return x; };

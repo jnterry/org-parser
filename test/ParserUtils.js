@@ -9,6 +9,11 @@
 
 require('./common');
 
+function expectParse(x, value){
+	expect(x.status).deep.equal(true);
+	expect(x.value ).deep.equal(value);
+}
+
 describe('many vs some', () => {
 	let many_a = P.many(P.string('a'));
 
@@ -208,21 +213,15 @@ describe('someUntil', () => {
 
 describe('newline and eol', () => {
 	it('\\n ends line', () => {
-		let result = P.eol.parse('\n');
-		expect(result.status).deep.equal(true);
-		expect(result.value ).deep.equal('\n');
+		expectParse(P.eol.parse('\n'), '\n');
 	});
 
 	it('\\r\\n ends line', () => {
-		let result = P.eol.parse('\r\n');
-		expect(result.status).deep.equal(true);
-		expect(result.value ).deep.equal('\r\n');
+		expectParse(P.eol.parse('\r\n'), '\r\n');
 	});
 
 	it('EOF ends line', () => {
-		let result = P.eol.parse('');
-		expect(result.status).deep.equal(true);
-		expect(result.value ).deep.equal(null);
+		expectParse(P.eol.parse(''), null);
 	});
 
 	it('newline wont accept EOF', () => {
@@ -252,4 +251,42 @@ describe('newline and eol', () => {
 		expect(result.index.line  ).deep.equal(2);
 		expect(result.expected).deep.equal(['EOF']);
 	});
+});
+
+describe('opt', () => {
+	it('basic usage where parser fails', () => {
+		expectParse(
+			P.opt(P.string('a')).parse(''),
+			undefined
+		);
+	});
+
+	it('basic usage where parser succeeds', () => {
+		expectParse(
+			P.opt(P.string('a')).parse('a'),
+			'a'
+		);
+	});
+
+
+	let pSandwich = P.seq(
+		P.many(P.string('a')).tie(),
+		P.opt (P.string('-')),
+		P.many(P.string('b')).tie()
+	);
+
+	it('sandwich usage where parser fails', () => {
+		expectParse(
+			pSandwich.parse('aabbb'),
+			['aa', undefined, 'bbb']
+		);
+	});
+
+	it('sandwich usage where parser succeeds', () => {
+		expectParse(
+			pSandwich.parse('aa-bbb'),
+			['aa', '-', 'bbb']
+		);
+	});
+
 });
