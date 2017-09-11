@@ -133,6 +133,54 @@ describe('manyUntil', () => {
 	});
 });
 
+describe('someUntil', () => {
+	describe('normal operation', () => {
+		it('digits until letter', () => {
+			let result = P.someUntil(P.digit, P.letter).parse('123a');
+			expect(result.status).deep.equal(true);
+			expect(result.value).deep.equal({
+				list: ['1', '2', '3'],
+				last: 'a',
+			});
+		});
+
+		it('starts and ends with correct offset', () => {
+			let result = P.seq(
+				P.some(P.digit),
+				P.whitespace,
+				P.someUntil(P.letter, P.whitespace),
+				P.all
+			).parse('12 abcd\t\nhello!');
+			expect(result.status).deep.equal(true);
+			expect(result.value ).deep.equal([
+				['1', '2'],
+				' ',
+				{ list: ['a', 'b', 'c', 'd'],
+				  last: '\t\n'
+				},
+				'hello!'
+			]);
+		});
+	});
+	describe('failures', () => {
+		it('fails if until matches without any some part matches', () => {
+			let result = P.someUntil(P.string('a'), P.string('b')).parse('b');
+			expect(result.status).deep.equal(false);
+			expect(result.index.line  ).deep.equal(1);
+			expect(result.index.column).deep.equal(1);
+			//expect(result.expected).deep.equal(["'a'"]);
+		});
+
+		it('fails if until matches without any some part matches, even if some part does match', () => {
+			let result = P.someUntil(P.string('a'), P.letter).parse('ab');
+			expect(result.status).deep.equal(false);
+			expect(result.index.line  ).deep.equal(1);
+			expect(result.index.column).deep.equal(1);
+			//expect(result.expected).deep.equal(['a']);
+		});
+	});
+});
+
 describe('newline and eol', () => {
 	it('\\n ends line', () => {
 		let result = P.eol.parse('\n');

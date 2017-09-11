@@ -70,12 +70,45 @@ P.manyUntil = function(pa, pb){
 				result.list.push(a.value[0].value);
 				i += (a.value[0].end.offset - a.value[0].start.offset);
 			} else {
-				let expected = [];
 				return P.makeFailure(i, [a.expected, b.expected]);
 			}
 		}
 
 		return P.makeSuccess(i, result);
+	});
+};
+
+/////////////////////////////////////////////////////////////////////
+/// \brief As with manyUntil, but list part must contain at least 1
+/// element
+/////////////////////////////////////////////////////////////////////
+P.someUntil = function(pa, pb){
+	return P(function (input, i){
+
+		let rest = input.substr(i);
+
+		let b = pb.mark().skip(P.all).parse(rest);
+		if(b.status === true){
+			return P.makeFailure(i, "until part matched before some part");
+		}
+
+		let a = pa.mark().skip(P.all).parse(rest);
+		if(a.status === false){
+			return P.makeFailure(i, a.expected);
+		}
+
+		i += (a.value.end.offset - a.value.start.offset);
+
+		let result = P.manyUntil(pa, pb).mark().skip(P.all).parse(input.substr(i));
+
+		if(result.status === false){
+			return P.makeFailure(i, result.expected);
+		}
+
+		i += (result.value.end.offset - result.value.start.offset);
+
+		result.value.value.list.unshift(a.value.value);
+		return P.makeSuccess(i, result.value.value);
 	});
 };
 
