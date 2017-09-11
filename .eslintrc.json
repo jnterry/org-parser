@@ -1,0 +1,44 @@
+{
+    "env": {
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+				"no-unused-vars" : [
+						"error",
+						{
+								"vars" : "local",
+								"args" : "after-used"
+						}
+				],
+				"indent": [
+						"error",
+						"tab"
+				],
+				"no-mixed-spaces-and-tabs" : [
+						"error",
+						"smart-tabs"
+				],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+				"comma-dangle": [
+						"error",
+						{
+								"objects" : "always-multiline"
+						}
+				],
+				"comma-spacing" : [
+						"error",
+						{ "before": false, "after": true }
+				]
+    }
+}

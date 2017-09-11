@@ -55,7 +55,7 @@ P.manyUntil = function(pa, pb){
 			last: undefined,
 		};
 
-		while(true){
+		while(i <= input.length){
 			let rest = input.substr(i);
 			let b = P.seq(pb.mark(), P.all).parse(rest);
 			if(b.status === true){

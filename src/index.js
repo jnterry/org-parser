@@ -9,11 +9,11 @@
 
 "use strict";
 
-let OrgLang = require('./OrgLang');
+//let OrgLang = require('./OrgLang');
 
 module.exports = {
 	//parse : OrgLang.document.parser.parse,
 	parse : function(){
 		throw 'Full parser not implemented!';
-	}
+	},
 };

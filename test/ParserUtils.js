@@ -156,7 +156,7 @@ describe('someUntil', () => {
 				['1', '2'],
 				' ',
 				{ list: ['a', 'b', 'c', 'd'],
-				  last: '\t\n'
+				  last: '\t\n',
 				},
 				'hello!'
 			]);
