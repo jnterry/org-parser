@@ -38,6 +38,48 @@ P.some = function(parser){
 };
 
 /////////////////////////////////////////////////////////////////////
+/// \brief Returns a parser which greedily invokes the parser `pa` as many
+/// times as possible, until the parser `pb` succeeds.
+/// Parser will yield object of the form:
+/// { list : [values_of_type_yielded_by_pa],
+///   last : value_of_type_yielded_by_pb
+/// }
+/// Parser fails if pa fails before pb succeeds, or EOF is encountered before
+/// pb succeeds
+/////////////////////////////////////////////////////////////////////
+P.manyUntil = function(pa, pb){
+	return P(function (input, i){
+
+		let result = {
+			list: [],
+			last: undefined,
+		};
+
+		while(true){
+			let rest = input.substr(i);
+			let b = P.seq(pb.mark(), P.all).parse(rest);
+			if(b.status === true){
+				result.last = b.value[0].value;
+				i += (b.value[0].end.offset - b.value[0].start.offset);
+				break;
+			}
+
+			let a = P.seq(pa.mark(), P.all).parse(rest);
+
+			if(a.status === true){
+				result.list.push(a.value[0].value);
+				i += (a.value[0].end.offset - a.value[0].start.offset);
+			} else {
+				let expected = [];
+				return P.makeFailure(i, [a.expected, b.expected]);
+			}
+		}
+
+		return P.makeSuccess(i, result);
+	});
+};
+
+/////////////////////////////////////////////////////////////////////
 /// \brief Identity function - does nothing
 /////////////////////////////////////////////////////////////////////
 P.id = function(x){ return x; };

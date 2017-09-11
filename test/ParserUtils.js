@@ -51,6 +51,88 @@ describe('many vs some', () => {
 	});
 });
 
+describe('manyUntil', () => {
+	describe('normal operation', () => {
+		it('abcdef - many any until d', () => {
+			let result = P.seq(
+				P.manyUntil(P.any, P.string('d')),
+				P.all
+			).parse('abcdef');
+			expect(result.status).deep.equal(true);
+			expect(result.value ).deep.equal([
+				{ list: ['a', 'b', 'c'],
+				  last: 'd',
+				},
+				'ef'
+			]);
+		});
+
+		it('abcdef - consume a, then many any until d', () => {
+			// this test is to ensure that manyUntil starts at right point of input sting
+			let result = P.seq(
+				P.any,
+				P.manyUntil(P.any, P.string('d')),
+				P.all
+			).parse('abcdef');
+			expect(result.status).deep.equal(true);
+			expect(result.value ).deep.equal([
+				'a',
+				{ list: ['b', 'c'],
+				  last: 'd',
+				},
+				'ef'
+			]);
+		});
+
+		it('abacada1 - many a(letter) until a(digit)', () => {
+			// ensure the many part doesn't eat a common prefix with the last part
+			let result = P.manyUntil(P.regex(/a[a-z]/), P.regex(/a\d/)).parse('abacada1');
+			expect(result.status).deep.equal(true);
+			expect(result.value ).deep.equal(
+				{ list: ['ab', 'ac', 'ad'],
+				  last: 'a1',
+				}
+			);
+		});
+
+		it('many part can consume nothing', () => {
+			let result = P.manyUntil(P.string('a'), P.string('b')).parse('b');
+			expect(result.status).deep.equal(true);
+			expect(result.value ).deep.equal({
+				list: [],
+				last: 'b',
+			});
+		});
+
+		it('ends if until part matches, even when many part matches', () => {
+			let result = P.manyUntil(P.any, P.string('END')).parse('abcEND');
+			expect(result.status).deep.equal(true);
+			expect(result.value ).deep.equal({
+				list: ['a', 'b', 'c'],
+				last: 'END',
+			});
+		});
+	});
+
+	describe('failures', () => {
+		it('Fails if a fails before b is encountered', () => {
+			let result = P.manyUntil(P.alt(P.string('a'), P.string('b')), P.string('c')).parse('abaadc');
+			expect(result.status).deep.equal(false);
+			expect(result.index.line  ).deep.equal(1);
+			expect(result.index.column).deep.equal(5);
+		});
+
+		it('Fails if EOF is encountered before b passes', () => {
+			let result = P.manyUntil(P.string('a'), P.string('b')).parse('aaa');
+			expect(result.status).deep.equal(false);
+			expect(result.index.line  ).deep.equal(1);
+			expect(result.index.column).deep.equal(4);
+
+		});
+
+	});
+});
+
 describe('newline and eol', () => {
 	it('\\n ends line', () => {
 		let result = P.eol.parse('\n');
