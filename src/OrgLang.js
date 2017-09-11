@@ -104,6 +104,30 @@ OrgLang.link = defParser(
 	}
 );
 
+/////////////////////////////////////////////////////////////////////
+/// \brief Parses a single line of potentially formatted text
+///
+/// \return
+/// {
+///   content   :: [string or span] - array of children, either just
+///                plain string of text, or additional span AST nodes
+///   style     :: char - one of the span.STYLE_XXX constants
+/// }
+/////////////////////////////////////////////////////////////////////
+OrgLang.span = {
+	type   : 'span',
+	styles : [
+		// see: http://orgmode.org/manual/Emphasis-and-monospace.html
+		'' , // No modifiers
+		'*', // *bold*
+		'_', // _underline_
+		'/', // /italic/
+		'=', // =verbatim=
+		'~', // ~code~
+		'+', // +strikethrough+
+	]
+};
+
 OrgLang.headline = defParser(
 	'headline',
 	P.seq(
@@ -112,8 +136,8 @@ OrgLang.headline = defParser(
 	),
 	x => {
 		return {
-			level   : x[0].length,
-			title   : x[1],
+			level : x[0].length,
+			title : x[1],
 		};
 	}
 );
