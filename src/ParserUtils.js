@@ -102,7 +102,7 @@ P.someUntil = function(pa, pb){
 		let result = P.manyUntil(pa, pb).mark().skip(P.all).parse(input.substr(i));
 
 		if(result.status === false){
-			return P.makeFailure(i, result.expected);
+			return P.makeFailure(i + result.index.offset, result.expected);
 		}
 
 		i += (result.value.end.offset - result.value.start.offset);

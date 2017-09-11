@@ -163,6 +163,17 @@ describe('someUntil', () => {
 		});
 	});
 	describe('failures', () => {
+		it("fails if doesn't start with some part or until part", () => {
+			let result = P.seq(
+				P.string('!'),
+				P.someUntil(P.string('a'), P.string('b'))
+			).parse('!c');
+			expect(result.status).deep.equal(false);
+			expect(result.index.line  ).deep.equal(1);
+			expect(result.index.column).deep.equal(2);
+			expect(result.expected).deep.equal([["'a'"]]);
+		});
+
 		it('fails if until matches without any some part matches', () => {
 			let result = P.someUntil(P.string('a'), P.string('b')).parse('b');
 			expect(result.status).deep.equal(false);
@@ -177,6 +188,20 @@ describe('someUntil', () => {
 			expect(result.index.line  ).deep.equal(1);
 			expect(result.index.column).deep.equal(1);
 			//expect(result.expected).deep.equal(['a']);
+		});
+
+		it('fails if EOF seen before until', () => {
+			let result = P.someUntil(P.string('a'), P.string('b')).parse('aa');
+			expect(result.status).deep.equal(false);
+			expect(result.index.line  ).deep.equal(1);
+			expect(result.index.column).deep.equal(3);
+		});
+
+		it('fails if some part fails before until part matches', () => {
+			let result = P.someUntil(P.string('a'), P.string('b')).parse('acb');
+			expect(result.status).deep.equal(false);
+			expect(result.index.line  ).deep.equal(1);
+			expect(result.index.column).deep.equal(2);
 		});
 	});
 });
