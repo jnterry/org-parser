@@ -35,6 +35,17 @@ function defParser(node_type, parser, mapper){
 
 let OrgLang = {};
 
+/////////////////////////////////////////////////////////////////////
+/// \brief Parses latex equation snippets such as:
+/// \( 1 + \frac{1}{2} \)
+/// \[ hi \]
+///
+/// \return
+/// {
+///   contents : trimed string contents of the block
+///   inline   : true if \( \), false if \[ \]
+/// }
+/////////////////////////////////////////////////////////////////////
 OrgLang.equation = defParser(
 	'equation',
 	P.string('\\')

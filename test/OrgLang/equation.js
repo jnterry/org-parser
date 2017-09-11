@@ -15,16 +15,6 @@ function checkParse(x){
 	expect(x.value.inline  ).to.exist;
 }
 
-function checkFail(x, args){
-	expect(x.status).deep.equal(false);
-	if(args.column !== undefined){
-		expect(x.index.column).deep.equal(args.column);
-	}
-	if(args.line !== undefined){
-		expect(x.index.line).deep.equal(args.line);
-	}
-}
-
 describe('successes', () => {
 	it('Basic inline equation', () => {
 		let result = OrgLang.equation.parser.parse('\\( x \\)');
@@ -43,21 +33,24 @@ describe('successes', () => {
 
 describe('failures', () => {
 	it('Unclosed inline equation', () => {
-		let result = OrgLang.equation.parser.parse('\\( a + x');
-		checkFail(result, { column: 9, line: 1});
+		expectFail(OrgLang.equation.parser.parse('\\( a + x'),
+		           { column: 9, line: 1}
+		          );
 	});
 
 	it('Unclosed block equation', () => {
-		let result = OrgLang.equation.parser.parse('\\[ a + x');
-		checkFail(result, { column: 9, line: 1});
+		expectFail(OrgLang.equation.parser.parse('\\[ a + x'),
+		           { column: 9, line: 1}
+		          );
 	});
 
 	// :TODO: - we want to support graceful failures, this should
 	// actually probably generate an equation node, but tag it with a
 	// warning or similar
 	/*it('Mis-closed equation', () => {
-		let result = OrgLang.equation.parser.parse('\\( 1 + 2 \\]');
-		expect(result).to.deep.equal({});
-		checkFail(result, { column: 11, line: 1});
+		let result = ;
+		expectFail(OrgLang.equation.parser.parse('\\( 1 + 2 \\]'),
+		          { column: 11, line: 1}
+		         );
 	});*/
 });
