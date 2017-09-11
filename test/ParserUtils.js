@@ -253,6 +253,30 @@ describe('newline and eol', () => {
 	});
 });
 
+describe('anyButEol', () => {
+	it('a', () => {
+		expectParse(P.anyButEol.parse('a'), 'a');
+	});
+
+	it('\\n', () => {
+		expectFail(P.anyButEol.parse('\n'),
+		           { line: 1, column: 1 }
+		          );
+	});
+
+	it('\\r', () => {
+		expectFail(P.anyButEol.parse('\r'),
+		           { line: 1, column: 1 }
+		          );
+	});
+
+	it('EOF', () => {
+		expectFail(P.anyButEol.parse(''),
+		           { line: 1, column: 1 }
+		          );
+	});
+});
+
 describe('opt', () => {
 	it('basic usage where parser fails', () => {
 		expectParse(

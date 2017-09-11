@@ -32,3 +32,16 @@ global.expectFail = function(x, args){
 		expect(x.index.line).deep.equal(args.line);
 	}
 };
+
+global.escapeStringChars = function(str){
+	return str
+		.replace(/\n/g, '\\n')
+		.replace(/\r/g, '\\r')
+		.replace(/\t/g, '\\t');
+};
+
+global.itFail = function(parser, string, args){
+	it(escapeStringChars(string), () => {
+		expectFail(parser.parse(string), args);
+	});
+}

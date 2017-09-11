@@ -62,6 +62,48 @@ OrgLang.equation = defParser(
 	}
 );
 
+/////////////////////////////////////////////////////////////////////
+/// \brief Parses org mode links such as:
+/// [[file:test.png]]
+/// [[example.com][click here]]
+///
+///
+/// \todo :TODO: parse the target string to get link type etc,
+///   see: http://orgmode.org/manual/Internal-links.html,
+///        http://orgmode.org/manual/External-links.html
+/// \return
+/// {
+///   target : contents of first  [] - where link is going
+///   text   : contents of second [] - text to display, may be undefined
+/// }
+/////////////////////////////////////////////////////////////////////
+OrgLang.link = defParser(
+	'link',
+
+	P.string('[[')
+		.then(
+			P.seq(
+				P.manyUntil(P.anyButEol, P.string(']')),
+				P.opt(
+					P.string('[').then(P.manyUntil(P.anyButEol, P.string(']')))
+				)
+			)
+		)
+		.skip(P.string(']')),
+
+	(x) => {
+		let text = undefined;
+		if(x[1] !== undefined){
+			text = x[1].list.join('');
+		}
+
+		return {
+			target : x[0].list.join(''),
+			text   : text,
+		};
+	}
+);
+
 OrgLang.headline = defParser(
 	'headline',
 	P.seq(
