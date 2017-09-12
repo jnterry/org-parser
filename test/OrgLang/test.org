@@ -1,0 +1,66 @@
+
+* title
+  dsda
+  #+BEGIN_SRC
+  dsada
+  dsada
+  dsadas
+  dsa
+  #+END_SRC
+
+1+2 =\( test \)=
+
+
+_a_
+
+hello *bob _how_ * are* you?
+
+- span :plain
+  - "hello "
+  - span :bold
+	- "bob "
+	- span :underline
+	  - "how"
+	- " * are"
+  - "you?"
+
+
+Hello
+So there
+
+
+*person*
+*dsds*
+
+- fda
+- ddsdsa
+  - dsadas
+  - dsads
+- dsadas
+  - dsadsa
+    - dsads
+    - dsada
+  - dsd
+-
+
+* hello
+  sdasd
+  dsadasd
+  sads
+  da
+
+
+
+
+| \( hi | or \) |
+|       |       |
+|       |       |
+|       |       |
+
+  _test_
+  |        |   |
+  | thing* |   |
+  _hello,_\( x \)  how_
+
+
+** person

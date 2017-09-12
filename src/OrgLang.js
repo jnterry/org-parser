@@ -12,6 +12,25 @@
 let P = require('./ParserUtils');
 
 /////////////////////////////////////////////////////////////////////
+/// \brief Creates an AST node of the specified type from a parser which yielded
+/// a mark()
+/// \param type The type of node to create
+/// \param data Value yielded by parser with a mark() on the end
+/////////////////////////////////////////////////////////////////////
+function createAstNode(type, data){
+	let result = data.value;
+	if(result === undefined){
+		result = {};
+	}
+	result.type = type;
+	result.loc  = {
+		start : data.start,
+		end   : data.end,
+	};
+	return result;
+}
+
+/////////////////////////////////////////////////////////////////////
 /// \brief Defines a parser that creates an AstNode
 /// \param node_type Value of the 'type' field of the produced AST node
 /// \param parser    Parser to use to parse the contents of the AST node
@@ -22,16 +41,16 @@ function defParser(node_type, parser, mapper){
 	return {
 		type   : node_type,
 		parser : parser = parser.mark().map(x => {
-			let result = mapper(x.value);
-			result.type = node_type;
-			result.loc  = {
-				start : x.start,
-				end   : x.end,
-			};
-			return result;
+			x.value = mapper(x.value);
+			return createAstNode(node_type, x);
 		}),
 	};
 }
+
+/////////////////////////////////////////////////////////////////////
+/// \brief Helper parser which consumes leading whitespace on a line
+/////////////////////////////////////////////////////////////////////
+let pLineLeadingWhitespace = P.many(P.oneOf(' \t'));
 
 let OrgLang = {};
 
@@ -114,19 +133,7 @@ OrgLang.link = defParser(
 ///   style     :: char - one of the span.STYLE_XXX constants
 /// }
 /////////////////////////////////////////////////////////////////////
-OrgLang.span = {
-	type   : 'span',
-	styles : [
-		// see: http://orgmode.org/manual/Emphasis-and-monospace.html
-		'' , // No modifiers
-		'*', // *bold*
-		'_', // _underline_
-		'/', // /italic/
-		'=', // =verbatim=
-		'~', // ~code~
-		'+', // +strikethrough+
-	]
-};
+OrgLang.span = require('./parser_span');
 
 OrgLang.headline = defParser(
 	'headline',

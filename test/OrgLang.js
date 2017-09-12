@@ -13,3 +13,4 @@ global.OrgLang = require('../src/OrgLang');
 
 importTest('OrgLang/equation');
 importTest('OrgLang/link');
+importTest('OrgLang/span');
