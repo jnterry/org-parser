@@ -23,10 +23,8 @@ describe('Basic Tests', () => {
 		checkParse(x);
 		expect(x.value.style  ).deep.equal(span.styles.NONE);
 		expect(x.value.content).deep.equal(['Hello']);
-		//expect(x.value.loc.start.line  ).deep.equal(1);
-		//expect(x.value.loc.start.column).deep.equal(1);
-		//expect(x.value.loc.end.line    ).deep.equal(1);
-		//expect(x.value.loc.end.column  ).deep.equal(6);
+		expect(x.value.loc.start).deep.equal({ offset: 0, line: 1, column: 1 });
+		expect(x.value.loc.end  ).deep.equal({ offset: 5, line: 1, column: 6 });
 	});
 
 	it('Multiple words', () => {
@@ -34,10 +32,8 @@ describe('Basic Tests', () => {
 		checkParse(x);
 		expect(x.value.style  ).deep.equal(span.styles.NONE);
 		expect(x.value.content).deep.equal(['Hello World!']);
-		//expect(x.value.loc.start.line  ).deep.equal( 1);
-		//expect(x.value.loc.start.column).deep.equal( 1);
-		//expect(x.value.loc.end.line    ).deep.equal( 1);
-		//expect(x.value.loc.end.column  ).deep.equal(13);
+		expect(x.value.loc.start).deep.equal({ offset:  0, line: 1, column:  1 });
+		expect(x.value.loc.end  ).deep.equal({ offset: 12, line: 1, column: 13 });
 	});
 
 	it('Surrounding whitespace is trimmed', () => {
@@ -45,10 +41,8 @@ describe('Basic Tests', () => {
 		checkParse(x);
 		expect(x.value.style  ).deep.equal(span.styles.NONE);
 		expect(x.value.content).deep.equal(['trailing spaces']);
-		//expect(x.value.loc.start.line  ).deep.equal( 1);
-		//expect(x.value.loc.start.column).deep.equal( 2);
-		//expect(x.value.loc.end.line    ).deep.equal( 1);
-		//expect(x.value.loc.end.column  ).deep.equal(18);
+		expect(x.value.loc.start).deep.equal({ offset:  0, line: 1, column:  1 });
+		expect(x.value.loc.end  ).deep.equal({ offset: 17, line: 1, column: 18 });
 	});
 
 	it('Delimited', () => {
@@ -56,6 +50,9 @@ describe('Basic Tests', () => {
 		checkParse(x);
 		expect(x.value.style).deep.equal(span.styles.NONE);
 		expect(x.value.content).deep.equal(['cell A']);
+
+		expect(x.value.loc.start).deep.equal({ offset: 0, line: 1, column: 1 });
+		expect(x.value.loc.end  ).deep.equal({ offset: 8, line: 1, column: 9 });
 	});
 });
 
@@ -125,5 +122,48 @@ describe('Single Formatting', () => {
 	});
 	describe('Strikethrough', () => {
 		wrappedFormatSuite(span.styles.STRIKETHROUGH, '+');
+	});
+});
+
+describe('Multiple Spans', () => {
+	it('Multiple plain lines', () => {
+		let text = 'Hello\nWorld\nHere is some text';
+		let x = P.many(span.parser('\r\n')).parse(text);
+
+		expect(x.status).deep.equal(true);
+		expect(x.value.length === 3);
+
+		expect(x.value[0].style  ).deep.equal(span.styles.NONE);
+		expect(x.value[0].content).deep.equal(['Hello']);
+		expect(x.value[0].loc.start).deep.equal({ offset: 0, column: 1, line: 1 });
+		expect(x.value[0].loc.end  ).deep.equal({ offset: 5, column: 6, line: 1 });
+
+		expect(x.value[1].style  ).deep.equal(span.styles.NONE);
+		expect(x.value[1].content).deep.equal(['World']);
+		expect(x.value[1].loc.start).deep.equal({ offset:  6, column: 1, line: 2 });
+		expect(x.value[1].loc.end  ).deep.equal({ offset: 11, column: 6, line: 2 });
+
+		expect(x.value[2].style  ).deep.equal(span.styles.NONE);
+		expect(x.value[2].content).deep.equal(['Here is some text']);
+		expect(x.value[2].loc.start).deep.equal({ offset: 12, column:  1, line: 3 });
+		expect(x.value[2].loc.end  ).deep.equal({ offset: 29, column: 18, line: 3 });
+	});
+
+	it('Multiple lines', () => {
+		let text = 'Hello\n*Bob is my name*\n_How are you_?';
+		let x = P.many(span.parser('\r\n')).parse(text);
+		expect(x.status).deep.equal(true);
+		expect(x.value.length === 3);
+
+		expect(x.value[0].style  ).deep.equal(span.styles.NONE);
+		expect(x.value[0].content).deep.equal(['Hello']);
+
+		//expect(x.value[1].style  ).deep.equal(span.styles.BOLD);
+		expect(x.value[1].content).deep.equal(['Bob is my name']);
+
+		expect(x.value[2].style     ).deep.equal(span.styles.NONE);
+		expect(x.value[2].content[0].content).deep.equal(['How are you']);
+		expect(x.value[2].content[0].style).deep.equal(span.styles.UNDERLINE);
+		expect(x.value[2].content[1]).deep.equal('?');
 	});
 });
