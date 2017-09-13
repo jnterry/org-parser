@@ -142,9 +142,9 @@ span.parser = function(delimiters){
 					if(style === current.style){
 						//console.log("Char is that for current style, checking close");
 						if(canCloseSectionAt(index.offset)){
-							closeSection();
 							++index.offset;
 							++index.column;
+							closeSection();
 							continue;
 						}
 					} else {

@@ -50,7 +50,6 @@ describe('Basic Tests', () => {
 		checkParse(x);
 		expect(x.value.style).deep.equal(span.styles.NONE);
 		expect(x.value.content).deep.equal(['cell A']);
-
 		expect(x.value.loc.start).deep.equal({ offset: 0, line: 1, column: 1 });
 		expect(x.value.loc.end  ).deep.equal({ offset: 8, line: 1, column: 9 });
 	});
@@ -62,10 +61,8 @@ function wrappedFormatSuite(style_type, symbol){
 		checkParse(x);
 		expect(x.value.style  ).deep.equal(style_type);
 		expect(x.value.content).deep.equal(['word']);
-		//expect(x.loc.start.line  ).deep.equal(1);
-		//expect(x.loc.start.column).deep.equal(1);
-		//expect(x.loc.start.line  ).deep.equal(1);
-		//expect(x.loc.start.column).deep.equal(6);
+		expect(x.value.loc.start).deep.equal({ offset: 0, line: 1, column: 1 });
+		expect(x.value.loc.end  ).deep.equal({ offset: 6, line: 1, column: 7 });
 	});
 
 	it('Multi-Word', () => {
@@ -73,10 +70,8 @@ function wrappedFormatSuite(style_type, symbol){
 		checkParse(x);
 		expect(x.value.style  ).deep.equal(style_type);
 		expect(x.value.content).deep.equal(['text here']);
-		//expect(x.loc.start.line  ).deep.equal( 1);
-		//expect(x.loc.start.column).deep.equal( 1);
-		//expect(x.loc.start.line  ).deep.equal( 1);
-		//expect(x.loc.start.column).deep.equal(11);
+		expect(x.value.loc.start).deep.equal({ offset:  0, line: 1, column:  1 });
+		expect(x.value.loc.end  ).deep.equal({ offset: 11, line: 1, column: 12 });
 	});
 
 	it("Opener followed by whitespace doesn't open section", () => {
@@ -85,10 +80,8 @@ function wrappedFormatSuite(style_type, symbol){
 		checkParse(x);
 		expect(x.value.style  ).deep.equal(span.styles.NONE);
 		expect(x.value.content).deep.equal([text]);
-		//expect(x.loc.start.line  ).deep.equal(1);
-		//expect(x.loc.start.column).deep.equal(1);
-		//expect(x.loc.start.line  ).deep.equal(1);
-		//expect(x.loc.start.column).deep.equal(7);
+		expect(x.value.loc.start).deep.equal({ offset: 0, line: 1, column: 1 });
+		expect(x.value.loc.end  ).deep.equal({ offset: 7, line: 1, column: 8 });
 	});
 
 	it("Closer preceeded by whitespace doesn't close section", () => {
@@ -97,10 +90,8 @@ function wrappedFormatSuite(style_type, symbol){
 		checkParse(x);
 		expect(x.value.style  ).deep.equal(style_type);
 		expect(x.value.content).deep.equal([text]);
-		//expect(x.loc.start.line  ).deep.equal( 1);
-		//expect(x.loc.start.column).deep.equal( 1);
-		//expect(x.loc.start.line  ).deep.equal( 1);
-		//expect(x.loc.start.column).deep.equal(12);
+		expect(x.value.loc.start).deep.equal({ offset:  0, line: 1, column:  1 });
+		expect(x.value.loc.end  ).deep.equal({ offset: 14, line: 1, column: 15 });
 	});
 }
 
