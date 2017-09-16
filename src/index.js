@@ -72,37 +72,40 @@ function OrgParser(){
 /// }
 /////////////////////////////////////////////////////////////////////
 OrgParser.prototype.splitLines = function(input){
-	let lines = input.split("\n");
+	let lines = [];
 
-	// Remove empty last line if file ends with trailing \n
-	if(lines[lines.length-1].length === 0){
-		lines.pop();
+	let l = {
+		content : '',
+		loc : { start : new TextLocation(0,1,1) },
+	};
+
+	let line   = 1;
+	let column = 1;
+
+	for(let i = 0; i < input.length; ++i){
+		if(input[i] === '\r' || input[i] === '\n'){
+			let extra = (input[i] === '\r' ? 1 : 0);
+			l.loc.end = new TextLocation(i + extra, line, column + extra);
+			i += extra;
+			lines.push(l);
+
+			++line;
+			column = 1;
+
+			l = {
+				content : '',
+				loc : { start : new TextLocation(i + 1, line, column) }
+			};
+		} else {
+			l.content += input[i];
+			++column;
+		}
 	}
 
-	let offset = 0;
-
-	for(let i = 0; i < lines.length; ++i){
-
-		let line = {
-			content : lines[i],
-			loc : {
-				start : new TextLocation(offset, i+1, 1),
-			}
-		};
-
-		let line_delta = lines[i].length + 1; // +1 for the \n that would have ended the line
-
-		offset += line_delta;
-
-		line.loc.end = new TextLocation(offset, i+1, line_delta);
-
-		lines[i] = line;
-	}
-
-	if(input[input.length-1] !== '\n'){
-		// Then last line isn't terminated with a \n
-		lines[lines.length-1].loc.end.offset--;
-		lines[lines.length-1].loc.end.column--;
+	if(l.content.length > 0){
+		if(input[input.length - 1] !== '\n'){ column--; }
+		l.loc.end = new TextLocation(input.length - 1, line, column);
+		lines.push(l);
 	}
 
 	return lines;

@@ -35,12 +35,12 @@ it("No Section Headings", () => {
 
 	checkParse(x, 0);
 	expect(x.value.loc.end  ).instanceof(Org.TextLocation);
-	expect(x.value.loc.end  ).deep.equal(new Org.TextLocation(16, 3, 3));
+	expect(x.value.loc.end  ).deep.equal(new Org.TextLocation(15, 3, 3));
 	expect(x.value.children.length).deep.equal(0);
 	expect(x.value.content.loc.start).instanceof(Org.TextLocation);
 	expect(x.value.content.loc.start).deep.equal(new Org.TextLocation( 0, 1, 1));
 	expect(x.value.content.loc.end  ).instanceof(Org.TextLocation);
-	expect(x.value.content.loc.end  ).deep.equal(new Org.TextLocation(16, 3, 3));
+	expect(x.value.content.loc.end  ).deep.equal(new Org.TextLocation(15, 3, 3));
 });
 
 it("No Section Headings with trailing newline", () => {
@@ -52,12 +52,12 @@ it("No Section Headings with trailing newline", () => {
 
 	checkParse(x, 0);
 	expect(x.value.loc.end  ).instanceof(Org.TextLocation);
-	expect(x.value.loc.end  ).deep.equal(new Org.TextLocation(17, 3, 4));
+	expect(x.value.loc.end  ).deep.equal(new Org.TextLocation(16, 3, 4));
 	expect(x.value.children.length).deep.equal(0);
 	expect(x.value.content.loc.start).instanceof(Org.TextLocation);
 	expect(x.value.content.loc.start).deep.equal(new Org.TextLocation( 0, 1, 1));
 	expect(x.value.content.loc.end  ).instanceof(Org.TextLocation);
-	expect(x.value.content.loc.end  ).deep.equal(new Org.TextLocation(17, 3, 4));
+	expect(x.value.content.loc.end  ).deep.equal(new Org.TextLocation(16, 3, 4));
 
 });
 
@@ -75,12 +75,12 @@ it('Single Heading from start', () => {
 	expect(x.value.content.loc.start).deep.equal(null);
 	expect(x.value.content.loc.end  ).deep.equal(null);
 
-	let top_title = x.value.chilren[0];
-	expect(top_title.heading ).deep.equal('Top Title');
-	expect(top_title.level   ).deep.equal(1);
-	expect(top_title.children).deep.equal(0);
-	expect(top_title.loc.start).deep.equal(new Org.TextLocation( 0, 1,  1));
-	expect(top_title.loc.end  ).deep.equal(new Org.TextLocation(23, 2, 12));
+	let top_title = x.value.children[0];
+	expect(top_title.heading          ).deep.equal('Top Title');
+	expect(top_title.level            ).deep.equal(1);
+	expect(top_title.children.length  ).deep.equal(0);
+	expect(top_title.loc.start        ).deep.equal(new Org.TextLocation( 0, 1,  1));
+	expect(top_title.loc.end          ).deep.equal(new Org.TextLocation(23, 2, 12));
 	expect(top_title.content.loc.start).deep.equal(new Org.TextLocation(12, 2,  1));
 	expect(top_title.content.loc.end  ).deep.equal(new Org.TextLocation(23, 2, 12));
 });
@@ -98,12 +98,12 @@ it('Single with root content', () => {
 	expect(x.value.content.loc.start).deep.equal(new Org.TextLocation(0,1,1));
 	expect(x.value.content.loc.end  ).deep.equal(new Org.TextLocation(4,1,5));
 
-	let top_title = x.value.chilren[0];
-	expect(top_title.heading ).deep.equal('Top Title');
-	expect(top_title.level   ).deep.equal(1);
-	expect(top_title.children).deep.equal(0);
-	expect(top_title.loc.start).deep.equal(new Org.TextLocation( 5, 2,  1));
-	expect(top_title.loc.end  ).deep.equal(new Org.TextLocation(28, 3, 12));
+	let top_title = x.value.children[0];
+	expect(top_title.heading          ).deep.equal('Top Title');
+	expect(top_title.level            ).deep.equal(1);
+	expect(top_title.children.length  ).deep.equal(0);
+	expect(top_title.loc.start        ).deep.equal(new Org.TextLocation( 5, 2,  1));
+	expect(top_title.loc.end          ).deep.equal(new Org.TextLocation(28, 3, 12));
 	expect(top_title.content.loc.start).deep.equal(new Org.TextLocation(17, 3,  1));
 	expect(top_title.content.loc.end  ).deep.equal(new Org.TextLocation(28, 3, 12));
 });
@@ -243,4 +243,6 @@ it('Bad Level Nesting Test', () => {
 	expect(x.errors[0].loc.end.offset).is.above(x.errors[0].loc.start.offset);
 	// message should be complaining about level 4 as direct child of level 2
 	expect(x.errors[0].message).contains('level');
+	expect(x.errors[0].message).contains('2');
+	expect(x.errors[0].message).contains('4');
 });
