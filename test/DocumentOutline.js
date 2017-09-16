@@ -246,3 +246,16 @@ it('Bad Level Nesting Test', () => {
 	expect(x.errors[0].message).contains('2');
 	expect(x.errors[0].message).contains('4');
 });
+
+it('Headlines cannot have leading whitespace', () => {
+	let x = Parser.parseDocumentOutline(' * A\n');
+
+	checkParse(x, 0);
+	expect(x.value.level            ).deep.equal(0);
+	expect(x.value.heading          ).deep.equal('');
+	expect(x.value.children.length  ).deep.equal(0);
+	expect(x.value.loc.start        ).deep.equal(new Org.TextLocation(0, 1, 1));
+	expect(x.value.loc.end          ).deep.equal(new Org.TextLocation(4, 1, 5));
+	expect(x.value.content.loc.start).deep.equal(new Org.TextLocation(0, 1, 1));
+	expect(x.value.content.loc.end  ).deep.equal(new Org.TextLocation(4, 1, 5));
+});
