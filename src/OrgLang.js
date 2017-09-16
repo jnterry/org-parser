@@ -135,18 +135,4 @@ OrgLang.link = defParser(
 /////////////////////////////////////////////////////////////////////
 OrgLang.span = require('./parser_span');
 
-OrgLang.headline = defParser(
-	'headline',
-	P.seq(
-		P.some(P.string('*'   )).skip(P.regex(/[\s\t]*/)),
-		P.some(P.noneOf('\r\n')).skip(P.eol).tie()
-	),
-	x => {
-		return {
-			level : x[0].length,
-			title : x[1],
-		};
-	}
-);
-
 module.exports = OrgLang;
