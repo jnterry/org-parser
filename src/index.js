@@ -206,7 +206,7 @@ OrgParser.prototype.parseDocumentOutline = function(lines){
 					result.appendError(new ParseResult.Error(
 						lines[i].loc.start.clone(),
 						lines[i].loc.end.clone(),
-						"Attempted to open level " + level + " heading as direct child of level " + current.level + "heading"
+						"Attempted to open level " + level + " heading as direct child of level " + current.level + " heading"
 					));
 				}
 

@@ -32,7 +32,7 @@ let ParseResult = function(){
 
 ParseResult.Error = ParseError;
 
-ParseResult.appendError = function(error){
+ParseResult.prototype.appendError = function(error){
 	this.errors.push(error);
 };
 

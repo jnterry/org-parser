@@ -19,7 +19,7 @@ function checkParse(x, error_count){
 	if(error_count == null){ error_count = 0; }
 
 	expect(x).instanceof(Org.ParseResult);
-	expect(x.errors.length).deep.equal(0);
+	expect(x.errors.length).deep.equal(error_count);
 	expect(x.value.level          ).deep.equal(0 );
 	expect(x.value.heading        ).deep.equal('');
 	expect(x.value.loc.start).instanceof(Org.TextLocation);
@@ -218,4 +218,29 @@ it('Multiple Levels', () => {
 	expect(c.content.loc.start).deep.equal(null);
 	expect(c.content.loc.end  ).deep.equal(null);
 	expect(c.children.length  ).deep.equal(0);
+});
+
+it('Bad Level Nesting Test', () => {
+	let x = Parser.parseDocumentOutline(
+		'* A\n'+          // line  1
+		'** A.1\n' +      // line  2
+		'**** A.1.1\n' +  // line  3
+		'*** A.1.2\n' +   // line  4
+		'    text\n' +    // line  5
+		'    here\n' +    // line  6
+		'* B\n' +         // line  7
+		'** B.1\n' +      // line  8
+		'*** B.1.1\n' +   // line  9
+		'** B.2\n' +      // line 10
+		'** B.3\n'        // line 11
+	);
+
+	checkParse(x, 1);
+
+	expect(x.errors[0].loc.start.line).deep.equal(3);
+	expect(x.errors[0].loc.end.line  ).deep.equal(3);
+	expect(x.errors[0].loc.end.column).is.above(x.errors[0].loc.start.column);
+	expect(x.errors[0].loc.end.offset).is.above(x.errors[0].loc.start.offset);
+	// message should be complaining about level 4 as direct child of level 2
+	expect(x.errors[0].message).contains('level');
 });
