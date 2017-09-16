@@ -35,6 +35,24 @@ it('Single Line - Trailing \\n', () => {
 	expect(x[0].loc.end  ).deep.equal(new Org.TextLocation(5,1,6));
 });
 
+it('Empty Lines', () => {
+	let x = Parser.splitLines('Test\n\nHere');
+
+	expect(x.length    ).deep.equal(3);
+
+	expect(x[0].content  ).deep.equal('Test');
+	expect(x[0].loc.start).deep.equal(new Org.TextLocation(0, 1, 1));
+	expect(x[0].loc.end  ).deep.equal(new Org.TextLocation(4, 1, 5));
+
+	expect(x[1].content).deep.equal('');
+	expect(x[1].loc.start).deep.equal(new Org.TextLocation(5, 2, 1));
+	expect(x[1].loc.end  ).deep.equal(new Org.TextLocation(5, 2, 1));
+
+	expect(x[2].content).deep.equal('Here');
+	expect(x[2].loc.start).deep.equal(new Org.TextLocation(6, 3, 1));
+	expect(x[2].loc.end  ).deep.equal(new Org.TextLocation(9, 3, 4));
+});
+
 it('Multiline', () => {
 	let x = Parser.splitLines(
 		'Text\n' +
