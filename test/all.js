@@ -15,4 +15,5 @@ require('./common');
 describe('org-parser', () => {
 	importTest('ParserUtils');
 	importTest('OrgLang');
+	importTest('DocumentOutline');
 });
