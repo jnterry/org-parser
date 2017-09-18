@@ -95,8 +95,8 @@ it('Single with root content', () => {
 	checkParse(x, 0);
 	expect(x.value.loc.end).instanceof(Org.TextLocation);
 	expect(x.value.loc.end).deep.equal(new Org.TextLocation(28, 3, 12));
-	expect(x.value.content.loc.start).deep.equal(new Org.TextLocation(0,1,1));
-	expect(x.value.content.loc.end  ).deep.equal(new Org.TextLocation(4,1,5));
+	expect(x.value.content.loc.start).deep.equal(new Org.TextLocation(0, 1, 1));
+	expect(x.value.content.loc.end  ).deep.equal(new Org.TextLocation(4, 1, 5));
 
 	let top_title = x.value.children[0];
 	expect(top_title.heading          ).deep.equal('Top Title');
@@ -125,7 +125,6 @@ it('Multiple Levels', () => {
 
 	checkParse(x, 0);
 
-	let r = x.value;
 	let c = null; // current node
 
 	c = x.value;

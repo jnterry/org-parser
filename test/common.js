@@ -44,4 +44,4 @@ global.itFail = function(parser, string, args){
 	it(escapeStringChars(string), () => {
 		expectFail(parser.parse(string), args);
 	});
-}
+};

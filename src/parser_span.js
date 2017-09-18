@@ -9,6 +9,8 @@
 
 "use strict";
 
+let P = require('./ParserUtils');
+
 let span = {
 	type   : 'span',
 	styles : {

@@ -76,7 +76,7 @@ OrgParser.prototype.splitLines = function(input){
 
 	let l = {
 		content : '',
-		loc : { start : new TextLocation(0,1,1) },
+		loc : { start : new TextLocation(0, 1, 1) },
 	};
 
 	let line   = 1;
@@ -143,8 +143,8 @@ function Section(heading, level, start){
 }
 Section.prototype.fmap = function(f){
 	f(this);
-	for(let i = 0; i < children.length; ++i){
-		children[i].fmap(f);
+	for(let i = 0; i < this.children.length; ++i){
+		this.children[i].fmap(f);
 	}
 };
 
@@ -177,7 +177,7 @@ OrgParser.prototype.parseDocumentOutline = function(lines){
 
 	let result = new ParseResult();
 
-	let root    = new Section('', 0, new TextLocation(0,1,1));
+	let root    = new Section('', 0, new TextLocation(0, 1, 1));
 	if(lines.length > 0 && lines[0].content[0] !== '*'){
 		// then the section contains content
 		root.content.loc.start = lines[0].loc.start.clone();
