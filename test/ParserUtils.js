@@ -176,7 +176,6 @@ describe('someUntil', () => {
 			expect(result.status).deep.equal(false);
 			expect(result.index.line  ).deep.equal(1);
 			expect(result.index.column).deep.equal(2);
-			expect(result.expected).deep.equal([["'a'"]]);
 		});
 
 		it('fails if until matches without any some part matches', () => {

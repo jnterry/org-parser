@@ -26,9 +26,10 @@
   },
   "homepage": "https://github.com/jnterry/org-parser#readme",
   "dependencies": {
-    "parsimmon": "1.6.2"
+    "parsimmon": "1.12.0"
   },
   "devDependencies": {
+		"@types/parsimmon": "1.10.0",
     "chai": "4.1.0",
     "coveralls": "2.13.1",
     "eslint": "^4.6.1",
